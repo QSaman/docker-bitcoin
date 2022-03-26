@@ -1,0 +1,14 @@
+services:
+  bitcoin:
+    image: bitcoin:22.0
+    build: ./bitcoin
+    volumes:
+      - /run/media/saman/btc/bitcoin/:/bitcoin/.bitcoin
+    extra_hosts:
+      host.docker.internal: host-gateway
+  electrs:
+    image: electrs:0.9.6
+    build: ./electrs
+    extra_hosts:
+      host.docker.internal: host-gateway
+
