@@ -3,12 +3,18 @@ services:
     image: bitcoin:22.0
     build: ./bitcoin
     volumes:
-      - /run/media/saman/btc/bitcoin/:/bitcoin/.bitcoin
-    extra_hosts:
-      host.docker.internal: host-gateway
+      - ${btc_dir:?err}:/bitcoin/.bitcoin
+    network_mode: "host"
   electrs:
     image: electrs:0.9.6
     build: ./electrs
-    extra_hosts:
-      host.docker.internal: host-gateway
-
+    network_mode: "host"
+    volumes:
+      - ${electrs_dir:?err}:/data
+      - ${btc_dir:?err}:/bitcoin
+    command: [
+      "--daemon-dir=/bitcoin",
+      "--db-dir=/data/db",
+    ]
+    depends_on:
+      - bitcoin
